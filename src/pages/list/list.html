@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>List</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+      <ion-icon [name]="item.icon" item-start></ion-icon>
+      {{item.title}}
+      <div class="item-note" item-end>
+        {{item.note}}
+      </div>
+    </button>
+  </ion-list>
+  <div *ngIf="selectedItem" padding>
+    You navigated here from
+    <b>{{selectedItem.title}}</b>
+  </div>
+  <ion-row>
+    <ion-col width-50 style="text-align: center">
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <button ion-button outline round (click)="presentModalMeuseventos()" large color="verde" icon-end>
+        Meus eventos
+        <ion-icon name="calendar"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col width-50 style="text-align: center">
+      <br>
+      <br>
+      <button ion-button outline round (click)="presentModalMeuseventos()" large color="verde" icon-end>
+        Criar eventos
+        <ion-icon name="create"></ion-icon>
+      </button>
+    </ion-col>
+    <ion-col width-50 style="text-align: center">
+      <br>
+      <br>
+      <button ion-button outline round (click)="presentModalMeuseventos()" large color="verde" icon-end>
+        Histórico Dos eventos
+        <ion-icon name="folder"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-content>
