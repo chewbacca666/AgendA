@@ -1,0 +1,32 @@
+//Selecionar os campos.
+SELECT users.id,users.name,users.surname,groups.name AS Grupo
+//Aponta a tabela inicial.
+FROM public.groups 
+//Intersecção.
+INNER JOIN public.participation ON (groups.id = public.participation.group_id) 
+INNER JOIN public.users ON (users.id = participation.user_id) 
+//Condição da minha pesquisa.
+WHERE groups.id = 1
+//Pega o que tem em comum e o que tem no da esquerda.
+LEFT JOIN public
+//Pega o que tem em comum e o que tem so na da direita.
+RIGHT JOIN public
+// Ordena pelo campo pedido.
+ORDER BY
+//Procurar uma palavra/letra e compara
+WHERE ... like '%%'
+//Procurar uma palavra/treta que eu n quero
+WHERE ... not like '%%'
+/////////////////////////////////////////////////////////////
+SELECT users.id, users.name,users.surname,users.email,users.password, COUNT(*) as Groups
+FROM public.users
+INNER JOIN public.participation ON (users.id = public.participation.user_id) 
+INNER JOIN public.groups ON (groups.id = public.participation.group_id)
+GROUP BY users.id
+ORDER BY users.id
+//////////////////////////////////////////////////////////////////
+if(i == '0'):
+print(str(result[i][0])+":",result[i][1])
+else:
+if(result[i][0] != result[i-1][0]):
+print(str(result[i][0])+":",result[i][1])
