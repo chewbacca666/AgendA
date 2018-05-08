@@ -4,7 +4,7 @@ from groups import Group
 
 
 
-class GroupDAO:
+class GroupDAO(object):
 
 
 	

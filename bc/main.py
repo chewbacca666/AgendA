@@ -4,8 +4,8 @@ from groups import Group
 from userDAO import *
 from groupDAO import *
 from connection import *
-
-
+import hashlib
+import json
 connection = Connection("AgendA")
 
 userDAO = UserDAO(connection)
@@ -14,36 +14,78 @@ groupDAO = GroupDAO(connection)
 
 app = Flask(__name__)
 
-@app.route("/cadastrar")
-def Insert():
-	pass
 
 
 
-@app.route("/user/")
-def List():
+
+@app.route("/list")
+def list():
 	users = userDAO.List()
-	string = "<p>"
-	for x in range(len(users)):
-		string = string + users[x].name + " " + users[x].surname + " " + str(users[x].email) + " " + str(users[x].password) + " " + str(users[x].birth) + "<br>"
-	print(string)
-	return string + "</p>"
-@app.route("/sou")
-def oi():
-	return "<h1> batata </h1>"
-
-@app.route("/xitus")
-def ola():
-	return"<h2> Hello </h2> "
+	users_str = json.dumps({"users": [user.__dict__ for user in users]})
+	
+	return users_str + '''<p> <a href="/home">Voltar</a>'''  
 
 
+@app.route("/home", methods = ['GET', 'POST'])
+def home():
+	return render_template("home.html")
+	
 
+
+#@app.route("/deletar" , methods = ['GET', 'POST'])
+#def deletar():
+
+
+
+
+
+@app.route("/register")
+def register():
+	return render_template("register.html")
+
+@app.route("/join" , methods = ['GET', 'POST'])
+def join():
+	#if(request.method == 'POST'):
+	return "404" '''<a href="/home">Voltar</a>'''
+
+
+
+@app.route("/registers" , methods = ['GET', 'POST'])
+def registers():
+	
+
+	if(request.method == "POST"):
+		
+
+		nome = request.form.get("nome")
+		sobrenome = request.form.get("sobrenome")
+		email = request.form.get("email")
+		password = request.form.get("senha")
+		passwordUtf8 = password.encode("utf-8")
+		hash = hashlib.md5(passwordUtf8)
+		senha = hash.hexdigest()
+		password2 = request.form.get("senha2")
+		passwordUtf82 = password2.encode("utf-8")
+		hash2 = hashlib.md5(passwordUtf82)
+		senha2 = hash2.hexdigest()
+		birth = request.form.get("birth")
+		if(senha == senha2):
+
+			if(nome and sobrenome and email and senha and birth):
+				userDAO.Insert(nome, sobrenome, email, senha, birth)
+
+		else:
+			return render_template("register2.html")
+
+
+	return redirect(url_for("home"))		
 
 
 
 
 if(__name__ == "__main__"):
 	app.run(debug = True)
+
 
 '''cond = 0
 while(cond != '10'):
@@ -70,12 +112,17 @@ while(cond != '10'):
 		user_data.append(name[0])
 		user_data.append(name[1])
 		user_data.append(input("Digite o seu email : "))
-		user_data.append(input("Digite a sua senha : "))
-		birth = input("Digite a data do seu aniversario por / : ").split("/")
-		user_data.append(birth[0])
-		user_data.append(birth[1])
-		user_data.append(birth[2])
-		userDAO.Insert(user_data[0],user_data[1],user_data[2],user_data[3],user_data[4],user_data[5],user_data[6])
+		#user_data.append(input("Digite a sua senha : "))
+		password = input("Digite sua senha : ")
+		passwordUtf8 = password.encode("utf-8")
+		hash = hashlib.md5(passwordUtf8)
+		hexa = hash.hexdigest()
+		user_data.append(hexa)
+		user_data.append(input("Digite a data do seu aniversario por - : "))
+		#user_data.append(birth[0])
+		#user_data.append(birth[1])
+		#user_data.append(birth[2])
+		userDAO.Insert(user_data[0],user_data[1],user_data[2],user_data[3],user_data[4])
 
 	
 	if(cond == '2'):
@@ -91,7 +138,7 @@ while(cond != '10'):
 
 
 		delete_user = input("Digite o id : ")
-		userDAO.Delet(delete_user[0],delete_user[1])
+		userDAO.Delet(delete_user)
 
 
 	if(cond == '4'):
@@ -131,9 +178,22 @@ while(cond != '10'):
 
 	if(cond == '8'):
 		print("\n")
-		
+		password = input("")
+		passwordUtf8 = password.encode("utf-8")
+		hash = hashlib.md5(passwordUtf8)
+		hexa = hash.hexdigest() 
 
 		#group_add = input("Qual o grupo que vais adicionar um usuario ? ")
-		print(groups.name)
-		
-'''
+		#print(groups.name)
+	if(cond == '9'):
+		password2 = input("")
+		passwordUtf82 = password2.encode("utf-8")
+		hash2 = hashlib.md5(passwordUtf82)
+		hexa2 = hash2.hexdigest()
+		print(hexa)
+		print(hexa2)
+		if(hexa == hexa2):
+			print("Eu consegui")
+		else:
+			print("Eu sou um bosta")
+	'''

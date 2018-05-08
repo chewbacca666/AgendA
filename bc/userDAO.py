@@ -5,7 +5,7 @@ from users import User
 
 
 
-class UserDAO:
+class UserDAO(object):
 	
 
 
@@ -23,9 +23,10 @@ class UserDAO:
 		users = []
 		rows = self.connection.cur.rowcount
 		results = self.connection.cur.fetchall()
-		print(results)
+		#print(results)
 		for i in range(rows):
 			users.append(User(results[i][0], results[i][1], results[i][2], results[i][3], results[i][4], results[i][5]))
+			print("\n")
 		return (users)
 
 
@@ -42,10 +43,10 @@ class UserDAO:
 		self.connection.conn.commit()
 
 
-	def Delet(self, Name, Surname):
+	def Delet(self, Id):
 
 
-		self.connection.cur.execute("DELETE FROM users WHERE name = '{}' and surname = '{}' ".format(Name, Surname))
+		self.connection.cur.execute("DELETE FROM users WHERE id = '{}'".format(Id))
 		self.connection.conn.commit()
 		
 
@@ -83,3 +84,5 @@ class UserDAO:
 			up_birth = input("Digite a nova data : ").split("/")
 			self.connection.cur.execute("UPDATE users SET birth = '{}' WHERE id = '{}'".format(up_birth	,up_id))
 			self.connection.conn.commit()
+
+	#def Find(self, Name, Password):

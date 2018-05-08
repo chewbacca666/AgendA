@@ -1,4 +1,4 @@
-class User:
+class User(object):
 	
 
 	def __init__(self, id, name, surname, email, password, birth):
@@ -9,4 +9,4 @@ class User:
 		self.surname = surname
 		self.email = email
 		self.password = password
-		self.birth = birth
+		self.birth = str(birth)

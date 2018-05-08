@@ -1,4 +1,4 @@
-class Group:
+class Group(object):
 
 	
 	def __init__(self,id,name,users = [],events = []):
