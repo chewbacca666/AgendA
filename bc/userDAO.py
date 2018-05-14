@@ -25,7 +25,7 @@ class UserDAO(object):
 		results = self.connection.cur.fetchall()
 		#print(results)
 		for i in range(rows):
-			users.append(User(results[i][0], results[i][1], results[i][2], results[i][3], results[i][4], results[i][5]))
+			users.append(User(results[i][0], results[i][1], results[i][2], results[i][3], results[i][4]))
 			print("\n")
 		return (users)
 
@@ -34,8 +34,7 @@ class UserDAO(object):
 
 
 		data = []
-		data.append(Name) 
-		data.append(Surname) 
+		data.append(Name)  
 		data.append(Email) 
 		data.append(Password)
 		data.append(Birth)
@@ -62,14 +61,6 @@ class UserDAO(object):
 			self.connection.conn.commit()
 		
 
-		if(Cond_up == '2'):
-		
-			up_id = input("Id : ")
-			up_surname = input("Novo sobrenome : ")
-			self.connection.cur.execute("UPDATE users SET surname = '{}' WHERE id = '{}'".format(up_surname,up_id))
-			self.connection.conn.commit()
-		
-
 		if(Cond_up == '3'):
 		
 			up_id = input("Id : ")
@@ -85,4 +76,9 @@ class UserDAO(object):
 			self.connection.cur.execute("UPDATE users SET birth = '{}' WHERE id = '{}'".format(up_birth	,up_id))
 			self.connection.conn.commit()
 
-	#def Find(self, Name, Password):
+
+	def Login(self, Email, Password):
+		self.connection.cur.execute("SELECT email,password FROM users WHERE email = '{}' and password = '{}'".format(Email, Password))
+		rows = self.connection.cur.rowcount
+		results = self.connection.cur.fetchall()
+		return (rows)

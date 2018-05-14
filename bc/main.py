@@ -22,13 +22,12 @@ app = Flask(__name__)
 def list():
 	users = userDAO.List()
 	users_str = json.dumps({"users": [user.__dict__ for user in users]})
-	
-	return users_str + '''<p> <a href="/home">Voltar</a>'''  
+	return str(users_str) + '''<p> <a href="/home">Voltar</a>'''  
 
 
 @app.route("/home", methods = ['GET', 'POST'])
 def home():
-	return render_template("home.html")
+	return render_template("main.html")
 	
 
 
@@ -43,11 +42,32 @@ def home():
 def register():
 	return render_template("register.html")
 
+
+
 @app.route("/join" , methods = ['GET', 'POST'])
 def join():
-	#if(request.method == 'POST'):
-	return "404" '''<a href="/home">Voltar</a>'''
+	return render_template("join.html")
 
+	#return "404" '''<a href="/home">Voltar</a>'''
+
+
+@app.route("/joins", methods = ['GET', 'POST'])
+def joins():
+	#campo = request.json['campo']
+	
+	#users_str = json.dumps({"users": [user.__dict__ for user in users]})
+	email = request.form.get("email")
+	password_h = request.form.get("senha")
+	passwordUtf8 = password_h.encode("utf-8")
+	hash = hashlib.md5(passwordUtf8)
+	password = hash.hexdigest()
+	login = userDAO.Login(email, password)
+	print(str(login))
+	if(int(login) > 0):
+		return render_template("login.html")
+	else:
+		return "VOCE NÃO ESTA LOGADO" '''<p> <a href="/home">Voltar</a>'''
+	
 
 
 @app.route("/registers" , methods = ['GET', 'POST'])
@@ -57,22 +77,22 @@ def registers():
 	if(request.method == "POST"):
 		
 
-		nome = request.form.get("nome")
-		sobrenome = request.form.get("sobrenome")
+		name = request.form.get("nome")
+		surname = request.form.get("sobrenome")
 		email = request.form.get("email")
-		password = request.form.get("senha")
-		passwordUtf8 = password.encode("utf-8")
+		password_h = request.form.get("senha")
+		passwordUtf8 = password_h.encode("utf-8")
 		hash = hashlib.md5(passwordUtf8)
-		senha = hash.hexdigest()
-		password2 = request.form.get("senha2")
-		passwordUtf82 = password2.encode("utf-8")
+		password = hash.hexdigest()
+		password_h2 = request.form.get("senha2")
+		passwordUtf82 = password_h2.encode("utf-8")
 		hash2 = hashlib.md5(passwordUtf82)
-		senha2 = hash2.hexdigest()
+		password2 = hash2.hexdigest()
 		birth = request.form.get("birth")
-		if(senha == senha2):
+		if(password == password2):
 
-			if(nome and sobrenome and email and senha and birth):
-				userDAO.Insert(nome, sobrenome, email, senha, birth)
+			if(name and surname and email and password and birth):
+				userDAO.Insert(name, surname, email, password, birth)
 
 		else:
 			return render_template("register2.html")
